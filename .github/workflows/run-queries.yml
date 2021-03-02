@@ -80,3 +80,23 @@ jobs:
           --parameter='total_reward:NUMERIC:2000000' \
           --parameter='total_reward_snapshot:NUMERIC:0' 
 
+  upload-artifact:
+    needs: run-queries
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup gcloud SDK
+        uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+        with:
+          version: '309.0.0'
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          export_default_credentials: true
+      - name:
+        run: |
+          bq --location=US query --format json -n=1000000 \
+          'SELECT * FROM retroactive_${{ github.sha }}.all_earnings_hexadecimal' > retroactive_${{ github.sha }}.json
+      - name: 'Upload Artifact'
+        uses: actions/upload-artifact@v2
+        with:
+          name: retroactive_${{ github.sha }}.json
+          path: retroactive_${{ github.sha }}.json
