@@ -73,8 +73,8 @@ jobs:
           cat ${{ matrix.schema.file }} | \
           bq --location=US --dataset_id=${{ secrets.GCP_PROJECT_ID }}:retroactive_${{ github.sha }} query \
           --use_legacy_sql=false \
-          --parameter='v3_cutoff_block_number:INT64:11948960' \
-          --parameter='v2_cutoff_block_number:INT64:11948960' \
+          --parameter='v3_cutoff_block_number:INT64:11992501' \
+          --parameter='v2_cutoff_block_number:INT64:11992501' \
           --parameter='v1_pool_period:INT64:43200' \
           --parameter='token_floor:NUMERIC:20' \
           --parameter='total_reward:NUMERIC:2000000' \
